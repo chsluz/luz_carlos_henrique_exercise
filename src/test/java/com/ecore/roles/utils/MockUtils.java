@@ -43,4 +43,30 @@ public class MockUtils {
             e.printStackTrace();
         }
     }
+
+    public static void mockGetUserByIdMoreThanOnce(MockRestServiceServer mockServer, UUID userId, User user) {
+        try {
+            mockServer.expect(ExpectedCount.between(1, 5), requestTo("http://test.com/users/" + userId))
+                    .andExpect(method(HttpMethod.GET))
+                    .andRespond(
+                            withStatus(HttpStatus.OK)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .body(new ObjectMapper().writeValueAsString(user)));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void mockGetTeamByIdMoreThanOnce(MockRestServiceServer mockServer, UUID teamId, Team team) {
+        try {
+            mockServer.expect(ExpectedCount.between(1, 5), requestTo("http://test.com/teams/" + teamId))
+                    .andExpect(method(HttpMethod.GET))
+                    .andRespond(
+                            withStatus(HttpStatus.OK)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .body(new ObjectMapper().writeValueAsString(team)));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
 }

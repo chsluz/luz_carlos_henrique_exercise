@@ -1,8 +1,9 @@
 package com.ecore.roles.service;
 
-import com.ecore.roles.client.TeamsClient;
+import com.ecore.roles.client.TeamClient;
+import com.ecore.roles.client.dto.TeamDto;
 import com.ecore.roles.client.model.Team;
-import com.ecore.roles.service.impl.TeamsServiceImpl;
+import com.ecore.roles.service.impl.TeamServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,17 +21,17 @@ import static org.mockito.Mockito.when;
 class TeamsServiceTest {
 
     @InjectMocks
-    private TeamsServiceImpl TeamsService;
+    private TeamServiceImpl TeamsService;
     @Mock
-    private TeamsClient TeamsClient;
+    private TeamClient TeamClient;
 
     @Test
     void shouldGetTeamWhenTeamIdExists() {
         Team ordinaryCoralLynxTeam = ORDINARY_CORAL_LYNX_TEAM();
-        when(TeamsClient.getTeam(ORDINARY_CORAL_LYNX_TEAM_UUID))
+        when(TeamClient.getTeam(ORDINARY_CORAL_LYNX_TEAM_UUID))
                 .thenReturn(ResponseEntity
                         .status(HttpStatus.OK)
-                        .body(ordinaryCoralLynxTeam));
+                        .body(TeamDto.fromModel(ordinaryCoralLynxTeam)));
         assertNotNull(TeamsService.getTeam(ORDINARY_CORAL_LYNX_TEAM_UUID));
     }
 }
