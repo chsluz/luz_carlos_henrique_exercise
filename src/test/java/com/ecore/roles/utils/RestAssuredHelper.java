@@ -20,6 +20,9 @@ import static io.restassured.http.ContentType.JSON;
 
 public class RestAssuredHelper {
 
+    private static final String MEMBERSHIP_URL = "/v1/memberships";
+    private static final String ROLES_URL = "/v1/roles";
+
     public static void setUp(int port) {
         RestAssured.reset();
         RestAssured.defaultParser = Parser.JSON;
@@ -34,13 +37,13 @@ public class RestAssuredHelper {
         return sendRequest(givenNullableBody(RoleDto.fromModel(role))
                 .contentType(JSON)
                 .when()
-                .post("/v1/roles")
+                .post(ROLES_URL)
                 .then());
     }
 
     public static EcoreValidatableResponse getRoles() {
         return sendRequest(when()
-                .get("/v1/roles")
+                .get(ROLES_URL)
                 .then());
     }
 
@@ -48,16 +51,25 @@ public class RestAssuredHelper {
         return sendRequest(given()
                 .pathParam("roleId", roleId)
                 .when()
-                .get("/v1/roles/{roleId}")
+                .get(ROLES_URL + "/{roleId}")
                 .then());
     }
 
     public static EcoreValidatableResponse getRole(UUID userId, UUID teamId) {
         return sendRequest(given()
-                .queryParam("teamMemberId", userId)
-                .queryParam("teamId", teamId)
+                .pathParam("teamMemberId", userId)
+                .pathParam("teamId", teamId)
                 .when()
-                .get("/v1/roles/search")
+                .get(ROLES_URL + "/teams/{teamId}/member/{teamMemberId}")
+                .then());
+    }
+
+    public static EcoreValidatableResponse getRoles(UUID userId, UUID teamId) {
+        return sendRequest(given()
+                .queryParam("teamId", teamId)
+                .queryParam("teamMemberId", userId)
+                .when()
+                .get(ROLES_URL + "/search")
                 .then());
     }
 
@@ -65,15 +77,15 @@ public class RestAssuredHelper {
         return sendRequest(givenNullableBody(MembershipDto.fromModel(membership))
                 .contentType(JSON)
                 .when()
-                .post("/v1/roles/memberships")
+                .post(MEMBERSHIP_URL)
                 .then());
     }
 
     public static EcoreValidatableResponse getMemberships(UUID roleId) {
         return sendRequest(given()
-                .queryParam("roleId", roleId)
+                .pathParam("roleId", roleId)
                 .when()
-                .get("/v1/roles/memberships/search")
+                .get(MEMBERSHIP_URL + "/roles/{roleId}")
                 .then());
     }
 

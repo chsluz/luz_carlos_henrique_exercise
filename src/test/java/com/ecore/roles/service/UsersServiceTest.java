@@ -1,6 +1,7 @@
 package com.ecore.roles.service;
 
-import com.ecore.roles.client.UsersClient;
+import com.ecore.roles.client.UserClient;
+import com.ecore.roles.client.dto.UserDto;
 import com.ecore.roles.client.model.User;
 import com.ecore.roles.service.impl.UsersServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -22,15 +23,15 @@ class UsersServiceTest {
     @InjectMocks
     private UsersServiceImpl usersService;
     @Mock
-    private UsersClient usersClient;
+    private UserClient userClient;
 
     @Test
     void shouldGetUserWhenUserIdExists() {
         User gianniUser = GIANNI_USER();
-        when(usersClient.getUser(UUID_1))
+        when(userClient.getUser(UUID_1))
                 .thenReturn(ResponseEntity
                         .status(HttpStatus.OK)
-                        .body(gianniUser));
+                        .body(UserDto.fromModel(gianniUser)));
 
         assertNotNull(usersService.getUser(UUID_1));
     }

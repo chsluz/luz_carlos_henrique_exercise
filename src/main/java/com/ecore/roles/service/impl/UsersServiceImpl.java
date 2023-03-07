@@ -1,29 +1,28 @@
 package com.ecore.roles.service.impl;
 
-import com.ecore.roles.client.UsersClient;
-import com.ecore.roles.client.model.User;
-import com.ecore.roles.service.UsersService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ecore.roles.client.UserClient;
+import com.ecore.roles.client.dto.UserDto;
+import com.ecore.roles.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
-public class UsersServiceImpl implements UsersService {
+@RequiredArgsConstructor
+public class UsersServiceImpl implements UserService {
 
-    private final UsersClient usersClient;
+    private final UserClient userClient;
 
-    @Autowired
-    public UsersServiceImpl(UsersClient usersClient) {
-        this.usersClient = usersClient;
+    public UserDto getUser(UUID id) {
+        return userClient.getUser(id).getBody();
     }
 
-    public User getUser(UUID id) {
-        return usersClient.getUser(id).getBody();
-    }
-
-    public List<User> getUsers() {
-        return usersClient.getUsers().getBody();
+    public List<UserDto> getUsers() {
+        return userClient.getUsers().getBody().stream()
+                .map(UserDto::fromModel)
+                .collect(Collectors.toList());
     }
 }

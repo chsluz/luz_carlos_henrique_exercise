@@ -78,6 +78,19 @@ public class TestData {
         return user;
     }
 
+    public static User INVALID_USER(Boolean full) {
+        User user = User.builder()
+                .id(UUID_4)
+                .displayName("InvalidUser").build();
+        if (full) {
+            user.setFirstName("Invalid");
+            user.setLastName("User");
+            user.setAvatarUrl("https://cdn.fakercloud.com/avatars/rude_128.jpg");
+            user.setLocation("Brakusstad");
+        }
+        return user;
+    }
+
     public static User GIANNI_USER() {
         return GIANNI_USER(true);
     }
